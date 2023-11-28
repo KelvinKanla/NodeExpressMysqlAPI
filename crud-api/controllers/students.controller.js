@@ -26,11 +26,15 @@ async function oneStudent (student_id) {
     }
 
 }
+
+
 async function createStudent(studentsData){
     console.log("Student's data: ", studentsData)
     studentsData = await studentData.createStudent(studentsData);
     return studentsData;
 }
+
+
 async function updateStudentController(updateStudent, student_id){
     updateStudent = await studentData.updateStudent(updateStudent, student_id)
     return updateStudent;

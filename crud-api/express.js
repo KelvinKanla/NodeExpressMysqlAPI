@@ -3,7 +3,6 @@ const app = express();
 app.use(express.json());
 const studentController = require('./controllers/students.controller')
 
-const hospitalController = require('./controllers/hospital.controller')
 
 app.get('/students', async (req,res)=>{
 
@@ -36,9 +35,16 @@ app.post('/student/create', async (req, res) => {
     // console.log('Creating a student', req)
     let studentsData = req.body
     console.log("Student Data: ", studentsData)
+    try{
     const details = await studentController.createStudent(studentsData)
-
     return res.status(200).json({ success: 'Student created successfully', data: details });
+    } catch(error) {
+        console.log("an error occurred", [error])
+        if(error.code === 'ER_DUP_ENTRY'){
+            return res.status(400).json({ error: 'Record already exists'});
+        }
+        return res.status(500).json({ errror: 'Internal Server', });
+    }
 })
 
 app.put('/students/update/:id', async (req, res) => {
@@ -53,12 +59,6 @@ app.delete('/students/delete/:id', async (req, res) => {
     let student_id = req.params['id']
     const deleteStudent = await studentController.deleteStudentController(student_id)
     return res.status(200).json({ success: 'Student deleted successfully', data: deleteStudent})
-})
-
-app.get('/hospitals', async (req, res) => {
-    console.log(req)
-    const hos = await hospitalController.getAllHospitalsController();
-    return res.status(200).json({success: 'GOT ALL HOSPITALS', data: hos});
 })
 
 // Start the server

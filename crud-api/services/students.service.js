@@ -26,16 +26,18 @@ async function createStudent(studentsData){
     // const {first_name, last_name, Level, DOB, Entry_year} = studentsData;
     console.log("Service Student data: ", studentsData)
     const query = 'INSERT INTO Students SET ?';
-    const record = await mysql.queryResult(query, studentsData)
+    const record = await mysql.queryResult(query, [studentsData])
+    const latestRecordQuery = 'SELECT * FROM Students ORDER BY student_id DESC LIMIT 1';
+    const latestRecord = await mysql.queryResult(latestRecordQuery, []);
     console.log("Records: ", record)
-    return record;
-    
+    return latestRecord;
+
 }
 
 async function updateStudent(updateData, student_id) {
     console.log("About to update student!")
     const query = 'UPDATE Students SET ? WHERE student_id = ' + student_id;
-    let record = await mysql.queryResult(query, updateData)
+    let record = await mysql.queryResult(query, [updateData])
     return record;
 }
 
