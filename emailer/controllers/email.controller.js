@@ -39,10 +39,10 @@ async function emailValid(email) {
   
     if (!email) {
       console.log('Email is required');
-      validResponse = { error: "Email is required" };
+      validResponse = "Email is required";
     } else if (!emailRegex.test(email)) {
       console.log('Email is invalid. Must be in the form somename@domain.com');
-      validResponse = { error: "Email is invalid. Must be in the form somename@domain.com" };
+      validResponse = "Email is invalid. Must be in the form somename@domain.com";
     }
   
     return validResponse;
