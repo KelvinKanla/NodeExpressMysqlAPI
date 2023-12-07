@@ -42,7 +42,6 @@ async function sendEmailHelper (clientEmail) {
         },
     };
 
-    // console.log("request data sendmailhelper: ", requestData)
     return requestData;
 
 }
