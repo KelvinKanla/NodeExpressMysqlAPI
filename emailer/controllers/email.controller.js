@@ -1,4 +1,3 @@
-const { response } = require('express');
 const emailHelper = require('../helpers/email.helper')
 const axios = require('axios');
 
@@ -10,7 +9,7 @@ async function drsHelper(clientEmail) {
 async function sendEmail(req, res){
     const clientEmail = req.body.clientEmail
     // console.log("Send mail in controller folder running...")
-    let emailValidCheck = await emailValid(clientEmail)
+    let emailValidCheck = await emailHelper.emailValid(clientEmail)
     
     try {
         
@@ -31,23 +30,6 @@ async function sendEmail(req, res){
         console.log("Couldn't send: ", error)
         return res.status(500).json({ error: "Email couldn't be sent."});
     }
-}
-
-async function emailValid(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    let validResponse = true;
-  
-    console.log("Email: ", email);
-  
-    if (!email) {
-      console.log('Email is required');
-      validResponse = "Email is required";
-    } else if (!emailRegex.test(email)) {
-      console.log('Email is invalid. Must be in the form somename@domain.com');
-      validResponse = "Email is invalid. Must be in the form somename@domain.com" ;
-    }
-  
-    return validResponse;
 }
 
 module.exports = {

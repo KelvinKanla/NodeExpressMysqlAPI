@@ -35,32 +35,11 @@ app.post('/student/create', async (req, res) => {
     // console.log('Creating a student', req)
     let studentsData = req.body
     console.log("Student Data: ", studentsData.DOB)
+    // if(!studentsData){
+    //     return res.status(400).json({error: "request can not be empty"});
+    // }
 
     try{
-        // if(!studentsData.first_name || !studentsData.last_name || !studentsData.Level || !studentsData.DOB || !studentsData.Entry_year){
-        //     let missedFields = []
-            
-        //     if(!studentsData.first_name){
-        //         missedFields.push("First name is required")
-        //     }
-
-        //     if(!studentsData.last_name){
-        //         missedFields.push("Last name is required")
-        //     }
-
-        //     if(!studentsData.Level){
-        //         missedFields.push("Level is required")    
-        //     }
-
-        //     if(!studentsData.DOB){
-        //         missedFields.push("DOB is required")
-        //     }
-
-        //     if(!studentsData.Entry_year){
-        //         missedFields.push("Entry year is required")
-        //     }
-        //     return res.status(400).json({error: missedFields});
-        // }
         const requiredFields = ['first_name', 'last_name', 'Level', 'DOB', 'Entry_year'];
         const missedFields = [];
 
@@ -72,54 +51,70 @@ app.post('/student/create', async (req, res) => {
             }
         });
 
-        if (missedFields.length > 0) {
-            return res.status(400).json({ error: missedFields });
+        const missedFields2 = []
+        const missedDetails = await studentController.firstNameValid(studentsData.first_name)
+        missedFields2.push(missedDetails)
+        console.log("Express Valid response: ", missedFields2)
+        console.log("Missedfields Length: ", missedFields2.length)
+
+        if (missedFields2.length > 0){
+            return res.status(400).json({error: missedFields2});
         }
 
-        if((typeof studentsData.first_name != 'string' || !/[a-zA-Z]/.test(studentsData.first_name)) || (typeof studentsData.last_name != 'string' || !/[a-zA-Z]/.test(studentsData.last_name)) 
-        || typeof studentsData.Level != 'number' || typeof studentsData.DOB != 'string' || typeof studentsData.Entry_year != 'number'){
+        // if (missedFields.length > 0) {
+        //     return res.status(400).json({ error: missedFields });
+        // }
+        
+        //   if(Object.keys(studentsData).length > 0){
+        //     if (typeof studentsData.first_name !== 'string' || !/[a-zA-Z]/.test(studentsData.first_name )) {
+        //          console.log("first_name failed")
+        //         missedFields.push("Invalid first name. Only alphabets are allowed.")
+        //     }
 
-            let missedFields = []
-            if (typeof studentsData.first_name !== 'string' || !/[a-zA-Z]/.test(studentsData.first_name)) {
-                missedFields.push("Invalid first name. Only alphabets are allowed.")
-            }
+        //     if (typeof studentsData.last_name !== 'string' || !/[a-zA-Z]/.test(studentsData.last_name)) {
+        //         missedFields.push("Invalid last name. Only alphabets are allowed.")
+        //     }
 
-            if (typeof studentsData.last_name !== 'string' || !/[a-zA-Z]/.test(studentsData.last_name)) {
-                missedFields.push("Invalid last name. Only alphabets are allowed.")
-            }
+        //     if (typeof studentsData.Level !== 'number' || isNaN(studentsData.Level)) {
 
-            if (typeof studentsData.Level !== 'number' || isNaN(studentsData.Level)) {
-                missedFields.push("Invalid level. Must be a valid number.")
-            }
+        //         missedFields.push("Invalid level. Must be a valid number.")
+        //     }
 
-            if (typeof studentsData.DOB !== 'string') {
-                missedFields.push("Date must be valid string")
+        //     if (typeof studentsData.DOB !== 'string') {
+        //         missedFields.push("Date must be valid string")
 
-            }
+        //     }
+     
+        //     if(typeof studentsData.DOB === 'string'){
+        //         console.log("DOB failed 2")
+        //         if (dateValidate( studentsData.DOB)) {
+        //             missedFields.push("Date format must be yyyy-mm-dd")
+        //         }
+    
+        //     }
 
-            if(typeof studentsData.DOB === 'string'){
-                if (dateValidate( studentsData.DOB)) {
-                    console.log("reccceeeeeeeedddddddd")
-                    missedFields.push("Date format must be yyyy-mm-dd")
+        //     if (typeof studentsData.Entry_year !== 'number') {
 
-                    
-                }
+        //         missedFields.push("Entry year only accepts numbers.")
+        //     } 
+        //     if (studentsData.Entry_year < 2020 || studentsData.Entry_year > 2024) {
+        //         missedFields.push("Entry year must be in the range 2020-2024")
+        //     }
+        //     if (missedFields.length > 0) {
+        //         return res.status(400).json({error: missedFields});
 
-            }
+        //     }
+        //   }
 
-            if (typeof studentsData.Entry_year !== 'number') {
-                missedFields.push("Entry year only accepts numbers.")
-            }else if (studentsData.Entry_year < 2020 || studentsData.Entry_year > 2024) {
-                missedFields.push("Entry year must be in the range 2020-2024")
-            }
-            
-            
-            return res.status(400).json({error: missedFields});
+        //   console.log("we have passed validation")
 
-        }
-
+        
+        
         const details = await studentController.createStudent(studentsData)
         return res.status(200).json({ success: 'Student created successfully', data: details });
+
+
+        
 
     } catch(error) {
         console.log("an error occurred", [error])
@@ -153,7 +148,7 @@ function dateValidate(dateInput) {
     console.log("Hi, I'm here!")
     const dobParts = dateInput.split('-');
     console.log("dobparts: ", dobParts);
-
+ 
     if (dobParts.length !== 3 ||
         dobParts[0].length !== 4 ||
         dobParts[1].length !== 2 ||

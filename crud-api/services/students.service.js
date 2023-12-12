@@ -7,9 +7,8 @@ async function getStudents(){
     const studentsDB = await mysql.queryResult(query,[])
     console.log('List of students', studentsDB)
     return studentsDB;
-
-
 }
+
 async function getOneStudent(student_id){
     console.log("About to retrieve one student!")
     // var student_id = req.params['id']
@@ -22,7 +21,6 @@ async function getOneStudent(student_id){
 
 async function createStudent(studentsData){
     console.log("About to create a student!", studentsData)
-    
     // const {first_name, last_name, Level, DOB, Entry_year} = studentsData;
     console.log("Service Student data: ", studentsData)
     const query = 'INSERT INTO Students SET ?';
@@ -48,10 +46,43 @@ async function deleteStudent(student_id) {
     return deleteStudent;
 }
 
+async function firstNameValid(firstName){
+    let validResponse = null
+    if (!firstName){
+        validResponse = 'First name is required'
+        return validResponse;
+    }
+    if (typeof firstName !== 'string' || !/[a-zA-Z]/.test(firstName )) {
+        validResponse = 'Invalid first name. Only alphabets are allowed.'
+        return validResponse;
+    }
+    
+}
+
+async function lastNameValid(lastName){
+    let validResponse = ''
+    if (!lastName){
+        validResponse = 'Last name is required'
+    }
+    if (typeof lastName !== 'string' || !/[a-zA-Z]/.test(lastName )) {
+        validResponse = 'Invalid last name. Only alphabets are allowed.'
+    }
+    return validResponse;
+}
+
+async function levelValid(level){
+    let validResponse = ''
+    if (!level){
+        validResponse = 'Level is required'
+    }
+    if (typeof level !== 'string' || !/[a-zA-Z]/.test(level)) {
+        validResponse = 'Invalid level. Must be a valid number.'
+    }
+    console.log("Service Valid response: ", validResponse);
+    return validResponse;
+}
+
 module.exports = {
-    getStudents,
-    getOneStudent,
-    createStudent,
-    updateStudent,
-    deleteStudent,
+    getStudents, getOneStudent, createStudent, updateStudent, deleteStudent,
+    firstNameValid, lastNameValid, levelValid
 }

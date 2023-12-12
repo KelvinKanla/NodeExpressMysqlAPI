@@ -27,7 +27,6 @@ async function oneStudent (student_id) {
 
 }
 
-
 async function createStudent(studentsData){
     console.log("Student's data: ", studentsData)
     studentsData = await studentData.createStudent(studentsData);
@@ -45,10 +44,28 @@ async function deleteStudentController(student_id){
     return deleteStudent;
 }
 
+async function firstNameValid(firstName){
+    validResponse = await studentData.firstNameValid(firstName)
+    return validResponse;
+}
+
+async function lastNameValid(lastName){
+    validResponse = await studentData.lastNameValid(lastName)
+    return validResponse;
+}
+
+async function levelValid(level){
+    validResponse = await studentData.levelValid(level)
+    return validResponse;
+}
+
 module.exports = {
     allStudents,
     oneStudent,
     createStudent,
     updateStudentController,
     deleteStudentController,
+    firstNameValid,
+    lastNameValid,
+    levelValid,
 }
