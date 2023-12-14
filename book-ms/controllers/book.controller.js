@@ -1,8 +1,29 @@
-const bmService = require('../services/book.management.service')
+const bmService = require('../services/book.service');
+const Joi = require('joi');
+
+const addBookSchema = Joi.object({
+    title: Joi.string().required(),
+    author_id : Joi.number().required(),
+    publication_year : Joi.number().required(),
+    number_of_copies : Joi.number().required()
+})
+
+const updateBookSchema = Joi.object({
+    title: Joi.string(),
+    author_id : Joi.number(),
+    publication_year : Joi.number(),
+    number_of_copies : Joi.number()
+})
 
 async function addBookController(req, res) {
     try {
+
         const bookDetails = req.body
+        
+        const validationResult = addBookSchema.validate(bookDetails)
+        if(validationResult.error){
+            return res.status(400).json({error: validationResult.error.message});
+        }
         const addNewBook = await bmService.addBook(bookDetails);
         return res.status(200).json({ success: "New book added successfully", data: addNewBook })
     } catch (error) {
@@ -24,9 +45,13 @@ async function deleteBookController(req, res) {
 
 async function updateBookController(req, res) {
     try {
-        console.log("Starting...")
         const bookID = req.params['id']
         const bookDetails = req.body;
+
+        const validationResult = updateBookSchema.validate(bookDetails)
+        if(validationResult.error){
+            return res.status(400).json({error: validationResult.error.message});
+        }
         const updateBook = await bmService.updateBook(bookDetails, bookID);
         return res.status(200).json({ success: "Book updated successfully", data: updateBook })
     } catch (error) {
@@ -35,10 +60,6 @@ async function updateBookController(req, res) {
     }
 }
 
-
-
-
-
 module.exports = {
-    addBookController, deleteBookController, updateBookController
+    addBookController, deleteBookController, updateBookController,
 }

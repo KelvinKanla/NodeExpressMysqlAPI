@@ -11,7 +11,6 @@ async function addBook(bookDetails){
         console.log("Error: ", error)
         return res.status(500).json({ error: "Book could not be added!" });
     }
-
 }
 
 async function deleteBook(bookID){
@@ -25,7 +24,6 @@ async function deleteBook(bookID){
         console.log("Error: ", error)
         return res.status(500).json({ error: "Book could not be deleted!" });
     }
-
 }
 
 async function updateBook(bookDetails, bookID){
@@ -39,9 +37,8 @@ async function updateBook(bookDetails, bookID){
         console.log("Error: ", error)
         return res.status(500).json({ error: "Book could not be updated!" });
     }
-
 }
 
 module.exports = {
-    addBook, deleteBook, updateBook
+    addBook, deleteBook, updateBook,
 }
