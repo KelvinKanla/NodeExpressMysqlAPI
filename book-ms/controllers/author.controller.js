@@ -4,12 +4,12 @@ const Joi = require('joi');
 const addAuthorSchema = Joi.object({
     first_name: Joi.string().required(),
     last_name: Joi.string().required()
-});
+}); 
 
 const updateAuthorSchema = Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required()
-});
+    first_name: Joi.string(),
+    last_name: Joi.string()
+}).min(1);
 
 async function addAuthorController(req, res) {
     try {

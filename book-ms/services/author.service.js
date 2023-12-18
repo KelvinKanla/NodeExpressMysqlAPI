@@ -2,41 +2,40 @@ const mysql = require('./db')
 
 async function addAuthor(authorDetails){
     try {
-        console.log("Starting...")
+        console.log("About to add an author (service)...")
         const query = 'INSERT INTO Authors SET ?';
         const insertQuery = await mysql.queryResult(query, [authorDetails]);
         console.log("Author details: ", insertQuery);
         return insertQuery;
     } catch (error) {
-        console.log("Error: ", error)
-        return res.status(500).json({ error: "Author could not be added!" });
+        console.log("An error occured adding an author: ", error)
+        throw error;
     }
-
 }
 
 async function deleteAuthor(authorID){
     try {
-        console.log("Starting...")
+        console.log("About to delete an author (service)...")
         const query = 'DELETE FROM Authors WHERE id = ' + authorID;
         const deleteQuery = await mysql.queryResult(query, []);
         console.log("Author details: ", deleteQuery);
         return deleteQuery;
     } catch (error) {
-        console.log("Error: ", error)
-        return res.status(500).json({ error: "Author could not be deleted!" });
+        console.log("An error occured deleting an author: ", error)
+        throw error
     }
 }
 
 async function updateAuthor(authorDetails, authorID){
     try {
-        console.log("Starting...")
+        console.log("About to update an author (service)...")
         const query = 'UPDATE Authors SET ? WHERE id = ' + authorID;
         const deleteQuery = await mysql.queryResult(query, [authorDetails]);
         console.log("Author details: ", deleteQuery);
         return deleteQuery;
     } catch (error) {
-        console.log("Error: ", error)
-        return res.status(500).json({ error: "Author could not be updated!" });
+        console.log("An error occured while updating an author: ", error)
+        throw error
     }
 }
 

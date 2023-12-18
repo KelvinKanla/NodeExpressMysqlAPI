@@ -2,18 +2,18 @@ const bmService = require('../services/book.service');
 const Joi = require('joi');
 
 const addBookSchema = Joi.object({
-    title: Joi.string().required(),
+    title: Joi.string().required(), // limit number
     author_id : Joi.number().required(),
-    publication_year : Joi.number().required(),
+    publication_year : Joi.number().required(), // year type and range
     number_of_copies : Joi.number().required()
 })
 
-const updateBookSchema = Joi.object({
+const updateBookSchema = Joi.object.min({
     title: Joi.string(),
     author_id : Joi.number(),
     publication_year : Joi.number(),
     number_of_copies : Joi.number()
-})
+}).min(1);
 
 async function addBookController(req, res) {
     try {
@@ -22,7 +22,7 @@ async function addBookController(req, res) {
         
         const validationResult = addBookSchema.validate(bookDetails)
         if(validationResult.error){
-            return res.status(400).json({error: validationResult.error.message});
+            return res.status(400).json({error: validationResult.error.message}); // How to pass a custom message
         }
         const addNewBook = await bmService.addBook(bookDetails);
         return res.status(200).json({ success: "New book added successfully", data: addNewBook })
