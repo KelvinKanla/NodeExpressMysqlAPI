@@ -9,7 +9,7 @@ async function addBorrower(borrowerDetails){
         return insertQuery;
     } catch (error) {
         console.log("Error: ", error)
-        return res.status(500).json({ error: "Borrower could not be added!" });
+        throw error;
     }
 }
 
@@ -22,7 +22,7 @@ async function deleteBorrower(borrowerID){
         return deleteQuery;
     } catch (error) {
         console.log("Error: ", error)
-        return res.status(500).json({ error: "Borrower could not be deleted!" });
+        throw error;
     }
 }
 
@@ -37,8 +37,8 @@ async function updateBorrower(borrowerDetails, borrowerID){
         console.log("Borrower details: ", deleteQuery);
         return deleteQuery;
     } catch (error) {
-        console.log("Error: ", error)
-        return res.status(500).json({ error: "Borrower could not be updated!" });
+        console.error("Error: ", error)
+        throw error;
     }
 }
 

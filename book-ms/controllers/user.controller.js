@@ -3,14 +3,14 @@ const Joi = require('joi')
 // USER CONTROLLERS
 
 const addUserSchema = Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required()
+    first_name: Joi.string().max(60).required(),
+    last_name: Joi.string().max(60).required()
 })
 
 const updateUserSchema = Joi.object({
-    first_name: Joi.string(),
-    last_name: Joi.string()
-})
+    first_name: Joi.string().max(60),
+    last_name: Joi.string().max(60)
+}).min(1);
 
 
 async function addUserController(req, res) {
@@ -24,7 +24,7 @@ async function addUserController(req, res) {
         const addNewUser = await userService.addUser(userDetails);
         return res.status(200).json({ success: "New user added successfully", data: addNewUser })
     } catch (error) {
-        console.log("Couldn't add user: ", error)
+        console.error("Couldn't add user: ", error)
         return res.status(500).json({ error: "User could not be added!" });
     }
 }
@@ -35,7 +35,7 @@ async function deleteUserController(req, res) {
         const deleteUser = await userService.deleteUser(userID);
         return res.status(200).json({ success: "User deleted successfully", data: deleteUser })
     } catch (error) {
-        console.log("Couldn't add user: ", error)
+        console.error("Couldn't add user: ", error)
         return res.status(500).json({ error: "User could not be deleted!" });
     }
 }
@@ -52,7 +52,7 @@ async function updateUserController(req, res) {
         const updateUser = await userService.updateUser(userDetails, userID);
         return res.status(200).json({ success: "User updated successfully", data: updateUser })
     } catch (error) {
-        console.log("Couldn't add user: ", error)
+        console.error("Couldn't add user: ", error)
         return res.status(500).json({ error: "User could not be updated!" });
     }
 }

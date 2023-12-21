@@ -2,13 +2,13 @@ const authorService = require('../services/author.service');
 const Joi = require('joi');
 
 const addAuthorSchema = Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required()
+    first_name: Joi.string().max(60).required(),
+    last_name: Joi.string().max(60).required()
 }); 
 
 const updateAuthorSchema = Joi.object({
-    first_name: Joi.string(),
-    last_name: Joi.string()
+    first_name: Joi.string().max(60),
+    last_name: Joi.string().max(60)
 }).min(1);
 
 async function addAuthorController(req, res) {
@@ -23,7 +23,7 @@ async function addAuthorController(req, res) {
         const addNewAuthor = await authorService.addAuthor(authorDetails);
         return res.status(200).json({ success: "New author added successfully", data: addNewAuthor })
     } catch (error) {
-        console.log("Couldn't add author: ", error)
+        console.error("Couldn't add author: ", error)
         return res.status(500).json({ error: "Author could not be added!" });
     }
 }
@@ -34,7 +34,7 @@ async function deleteAuthorController(req, res) {
         const deleteAuthor = await authorService.deleteAuthor(authorID);
         return res.status(200).json({ success: "Author deleted successfully", data: deleteAuthor })
     } catch (error) {
-        console.log("Couldn't add author: ", error)
+        console.error("Couldn't add author: ", error)
         return res.status(500).json({ error: "Author could not be deleted!" });
     }
 }
@@ -52,7 +52,7 @@ async function updateAuthorController(req, res) {
         const updateAuthor = await authorService.updateAuthor(authorDetails, authorID);
         return res.status(200).json({ success: "Author updated successfully", data: updateAuthor })
     } catch (error) {
-        console.log("Couldn't add author: ", error)
+        console.error("Couldn't add author: ", error)
         return res.status(500).json({ error: "Author could not be updated!" });
     }
 }

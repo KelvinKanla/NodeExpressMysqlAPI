@@ -2,16 +2,16 @@ const bmService = require('../services/book.service');
 const Joi = require('joi');
 
 const addBookSchema = Joi.object({
-    title: Joi.string().required(), // limit number
-    author_id : Joi.number().required(),
-    publication_year : Joi.number().required(), // year type and range
-    number_of_copies : Joi.number().required()
-})
+    title: Joi.string().max(60).required(),
+    author_id: Joi.number().required(),
+    publication_year: Joi.number().integer().min(1800).max(new Date().getFullYear()).required(),
+    number_of_copies: Joi.number().required()
+});
 
-const updateBookSchema = Joi.object.min({
-    title: Joi.string(),
+const updateBookSchema = Joi.object({
+    title: Joi.string().max(60),
     author_id : Joi.number(),
-    publication_year : Joi.number(),
+    publication_year: Joi.number().integer().min(1800).max(new Date().getFullYear()),
     number_of_copies : Joi.number()
 }).min(1);
 
