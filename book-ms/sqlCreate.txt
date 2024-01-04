@@ -1,0 +1,53 @@
+CREATE TABLE Authors (
+    id INT(3) NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(60),
+    last_name VARCHAR(60),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    DOB DATE,
+    PRIMARY KEY (id),
+    INDEX (first_name)
+);
+
+
+CREATE TABLE Books (
+    id INT(3) NOT NULL AUTO_INCREMENT,
+    title VARCHAR(60),
+    author_id INT(3),
+    publication_year YEAR(4),
+    number_of_copies INT(3),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX (title),
+    INDEX (author_id),
+    INDEX (publication_year)
+);
+
+
+CREATE TABLE Borrowers (
+    id INT(3) NOT NULL AUTO_INCREMENT,
+    book_id INT(3),
+    user_id INT(3),
+    borrow_date DATE,
+    return_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX (book_id),
+    INDEX (user_id)
+);
+
+
+CREATE TABLE Users (
+    id INT(3) NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(60),
+    last_name VARCHAR(60),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    DOB DATE,
+    PRIMARY KEY (id),
+    INDEX (first_name)
+);
+
+

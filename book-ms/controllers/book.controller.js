@@ -53,6 +53,11 @@ async function updateBookController(req, res) {
             return res.status(400).json({error: validationResult.error.message});
         }
         const updateBook = await bmService.updateBook(bookDetails, bookID);
+
+        if (updateBook.affectedRows === 0) {
+            return res.status(404).json({ error: `Book with ID ${bookID} not found.` });
+        }
+
         return res.status(200).json({ success: "Book updated successfully", data: updateBook })
     } catch (error) {
         console.log("Couldn't add book: ", error)

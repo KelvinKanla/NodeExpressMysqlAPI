@@ -1,15 +1,17 @@
 const userService = require('../services/user.service')
-const Joi = require('joi')
+const Joi = require('joi').extend(require('@joi/date'));
 // USER CONTROLLERS
 
 const addUserSchema = Joi.object({
     first_name: Joi.string().max(60).required(),
-    last_name: Joi.string().max(60).required()
+    last_name: Joi.string().max(60).required(),
+    dob: Joi.date().format('YYYY-MM-DD').max('now').iso().required()
 })
 
 const updateUserSchema = Joi.object({
     first_name: Joi.string().max(60),
-    last_name: Joi.string().max(60)
+    last_name: Joi.string().max(60),
+    dob: Joi.date().format('YYYY-MM-DD').max('now').iso()
 }).min(1);
 
 
@@ -22,7 +24,10 @@ async function addUserController(req, res) {
             return res.status(400).json({error: validationResult.error.message})
         }
         const addNewUser = await userService.addUser(userDetails);
-        return res.status(200).json({ success: "New user added successfully", data: addNewUser })
+
+        const newUserRecord = { id: addNewUser.insertId, ...userDetails };
+
+        return res.status(200).json({ success: "New user added successfully", data: newUserRecord })
     } catch (error) {
         console.error("Couldn't add user: ", error)
         return res.status(500).json({ error: "User could not be added!" });
@@ -50,6 +55,11 @@ async function updateUserController(req, res) {
             return res.status(400).json({error: validationResult.error.message})
         }
         const updateUser = await userService.updateUser(userDetails, userID);
+
+        if (updateUser.affectedRows === 0) {
+            return res.status(404).json({ error: `User with ID ${userID} not found.` });
+        }
+
         return res.status(200).json({ success: "User updated successfully", data: updateUser })
     } catch (error) {
         console.error("Couldn't add user: ", error)

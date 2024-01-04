@@ -39,6 +39,17 @@ async function updateAuthor(authorDetails, authorID){
     }
 }
 
+async function getAllAuthors() {
+    try {
+        const query = 'SELECT * FROM Authors';
+        const authors = await mysql.queryResult(query, []);
+        return authors;
+    } catch (error) {
+        console.error("Error fetching authors: ", error);
+        throw error;
+    }
+}
+
 module.exports = {
-    addAuthor, deleteAuthor, updateAuthor,
+    addAuthor, deleteAuthor, updateAuthor, getAllAuthors
 }

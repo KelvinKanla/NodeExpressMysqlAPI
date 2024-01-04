@@ -23,6 +23,7 @@ app.put('/borrower/:id', borrowerController.updateBorrowerController)
 app.post('/author', authorController.addAuthorController)
 app.delete('/author/:id', authorController.deleteAuthorController)
 app.put('/author/:id', authorController.updateAuthorController)
+app.get('/author', authorController.getAllAuthorsController)
 
 app.listen(port, () => {
   console.log(`BMS server started on port ${port}`);
